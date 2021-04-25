@@ -16,6 +16,12 @@ For [apple silicone](https://ru.wikipedia.org/wiki/Apple_Silicon) devices folow 
 arch -x86_64 pod install
 ```
 
+Open `GeekMobile.xcworkspace` file and build project `or` create terminal in project folder and run next command
+
+```
+open GeekMobile.xcworkspace
+```
+
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
