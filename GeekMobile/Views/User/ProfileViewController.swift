@@ -30,13 +30,13 @@ class ProfileViewController: UIViewController {
     }
     
     func bindViewModel() {
-        viewModel.name.bind(to: nameLabel.rx.text).disposed(by: viewModel.bag)
-        viewModel.profilePhoto.subscribe(onNext: { [weak self] image in
-            
-            guard let data = image else { return }
-            self?.profileImageView.image = UIImage(data: data)
-            self?.profileImageView.setNeedsDisplay()
-        })
+//        viewModel.name.bind(to: nameLabel.rx.text).disposed(by: viewModel.bag)
+//        viewModel.profilePhoto.subscribe(onNext: { [weak self] image in
+//
+//            guard let data = image else { return }
+//            self?.profileImageView.image = UIImage(data: data)
+//            self?.profileImageView.setNeedsDisplay()
+//        })
     }
     
     override func viewDidLoad() {

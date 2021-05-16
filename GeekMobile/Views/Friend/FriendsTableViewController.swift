@@ -6,76 +6,89 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
+import Alamofire
+import SwiftyJSON
 
 class FriendsTableViewController: UITableViewController {
-    
-    private var friends: [FriendModel] = [
-        FriendModel(name: "Женя", surname: "Петров"),
-        FriendModel(name: "Света", surname: "Смирнова"),
-        FriendModel(name: "Катя", surname: "Матвеева"),
-        FriendModel(name: "Никита", surname: "Орлов"),
-        FriendModel(name: "Коля", surname: "Иванов"),
-        FriendModel(name: "Оксана", surname: "Минина"),
-        FriendModel(name: "Владимир", surname: "Путин"),
-        FriendModel(name: "Алла", surname: "Пугачева"),
-        FriendModel(name: "Верка", surname: "Сердючка"),
-        FriendModel(name: "Филипп", surname: "Киркоров"),
-        FriendModel(name: "Иосиф", surname: "Сталин"),
-        FriendModel(name: "Николай", surname: "Романов"),
-        FriendModel(name: "Олег", surname: "Тинькофф"),
-        FriendModel(name: "Евгений", surname: "Понасенков"),
-        FriendModel(name: "Алексей", surname: "Навальный"),
-    ]
-    
-    private var friendsDict = [Character:[FriendModel]]()
+        
+    private var friendsDict = [Character:[FriendViewModel]]()
     private var sortedKeys = [Character]()
+    private let bag = DisposeBag()
+    private let threadSafeAction = ThreadSafeAction(parallelsCount: 1)
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        for friend in friends {
+        loadFriends()
+            .subscribe(onNext: { [weak self] data in
+                self?.parseFriends(data: data)
+            })
+            .disposed(by: bag)
+    }
+    
+    func parseFriends(data: Data) {
+                
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             
-            guard let char = friend.surname.first else { continue }
+            guard let `self` = self else { return }
             
-            if friendsDict[char] == nil {
-                friendsDict[char] = []
-                sortedKeys.append(char)
-                sortedKeys.sort()
-            }
-            
-            friendsDict[char]!.append(friend)
-            friendsDict[char]!.sort { first, second in first.surname < second.surname}
-            
-            DispatchQueue.main.async { [weak self] in
-                self?.tableView.reloadData()
-            }
+            ParserJSON.getFriends(data: data)
+                .subscribe(onNext: { friend in
+                    
+                    self.threadSafeAction.call {
+                        
+                        guard let key = friend.name.first else { return }
+                        
+                        if self.friendsDict[key] == nil {
+                            self.friendsDict[key] = []
+                            self.sortedKeys.append(key)
+                            self.sortedKeys.sort()
+                        }
+                         
+                        self.friendsDict[key]!.append(FriendViewModel(model: friend))
+                        self.friendsDict[key]!.sort { first, second in first.fullName.value < second.fullName.value }
+                    }
+                    
+                    DispatchQueue.main.async { [weak self] in
+                        self?.tableView.reloadData()
+                    }
+                })
+                .disposed(by: self.bag)
         }
+    }
+    
+    func loadFriends() -> Observable<Data> {
         
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        let params: Parameters = [
+            VkAPI.Friend.fields.rawValue : "photo_200_orig",
+            VkAPI.token.rawValue : UserSession.shared.vkToken ?? "",
+            VkAPI.v.rawValue : VkAPI.Constants.v.rawValue
+        ]
+        
+        return NetworkManager.shared.makeRequest(url: "\(VkAPI.Constants.url.rawValue)/friends.get", params: params)
     }
 
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return sortedKeys.count
+        return threadSafeAction.call { sortedKeys.count > 0 ? sortedKeys.count : 1 }
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        if section >= sortedKeys.count {
+        return threadSafeAction.call {
+            
+            if section >= sortedKeys.count {
+                return 0
+            }
+            
+            let key = sortedKeys[section]
+            if friendsDict[key] != nil {
+                return friendsDict[key]!.count
+            }
             return 0
-        }
-        
-        let key = sortedKeys[section]
-        
-        if friendsDict[key] == nil {
-            return 0
-        } else {
-            return friendsDict[key]!.count
         }
     }
 
@@ -84,21 +97,36 @@ class FriendsTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        
-        return sortedKeys[section].uppercased()
+        return threadSafeAction.call {
+            if section >= sortedKeys.count {
+                return nil
+            }
+            return sortedKeys[section].uppercased()
+        }
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "FriendCell", for: indexPath) as! FriendTableViewCell
-
-        let friend = friendsDict[sortedKeys[indexPath.section]]?[indexPath.row]
         
-        let name = friend?.name ?? ""
-        let surname = friend?.surname ?? ""
-        cell.configureViewModel(viewModel: FriendViewModel(model: FriendModel(name: name, surname: surname, photosCount: 8)))
+        let vm = threadSafeAction.call { () -> FriendViewModel? in
+            
+            let key = sortedKeys[indexPath.section]
+            let index = indexPath.row
         
-        cell.setProfileImage(with: "https://i.pravatar.cc/300")
-        cell.viewModel?.loadImages()
+            guard let friendSet = friendsDict[key] else { return nil}
+            if index >= friendSet.count {
+                return nil
+            }
+            
+            return friendSet[index]
+        }
+        
+        if vm == nil {
+            return UITableViewCell()
+        }
+        
+        cell.configureViewModel(viewModel: vm!)
 
         return cell
     }
@@ -114,16 +142,16 @@ class FriendsTableViewController: UITableViewController {
 
     
     // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            
-            friends.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
+//    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+//        if editingStyle == .delete {
+//            // Delete the row from the data source
+//
+//            friends.remove(at: indexPath.row)
+//            tableView.deleteRows(at: [indexPath], with: .fade)
+//        } else if editingStyle == .insert {
+//            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+//        }
+//    }
     
 
     /*
@@ -152,8 +180,7 @@ class FriendsTableViewController: UITableViewController {
             guard let senderCell = sender as? FriendTableViewCell else { return }
             guard let vc = segue.destination as? PhotosViewController else { return }
             
-            let friendPhotos = senderCell.getPhotos()
-            vc.photos = friendPhotos
+            vc.viewModel = senderCell.viewModel
         }
     }
 }

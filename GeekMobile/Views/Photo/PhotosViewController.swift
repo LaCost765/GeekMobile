@@ -6,16 +6,25 @@
 //
 
 import UIKit
+import RxSwift
 
 private let reuseIdentifier = "PhotoCell"
 
 class PhotosViewController: UICollectionViewController {
-
-    var photos: [UIImage?] = []
+    
+    var photos: [(data: Data, likes: Int)] = []
+    
+    var viewModel: FriendViewModel?
+    var bag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        bindViewModel()
+        guard let vm = viewModel else { return }
+        if vm.photos.value.isEmpty {
+            vm.loadPhotos()
+        }
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -25,6 +34,20 @@ class PhotosViewController: UICollectionViewController {
         // Do any additional setup after loading the view.
     }
 
+    func bindViewModel() {
+        
+        guard let vm = viewModel else { return }
+        vm.photos
+            .subscribe(onNext: { [weak self] dataArray in
+                
+                guard let `self` = self else { return }
+                DispatchQueue.main.async {
+                    self.photos = dataArray
+                    self.collectionView.reloadData()
+                }
+            })
+            .disposed(by: bag)
+    }
     
     // MARK: - Navigation
 
@@ -42,7 +65,7 @@ class PhotosViewController: UICollectionViewController {
             let frame = CGRect(x: cell.frame.origin.x, y: cell.frame.origin.y + navBarHeight, width: cell.frame.width, height: cell.frame.height)
             
             customSegue.startFrame = frame
-            animatedVC.images = photos
+            animatedVC.images = photos.map { UIImage(data: $0.data) }
             animatedVC.currentImageIndex = collectionView.indexPath(for: cell)?.item ?? 0
         }
     }
@@ -63,10 +86,8 @@ class PhotosViewController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! PhotoCollectionViewCell
     
-        guard let image = photos[indexPath.item] else {
-            return cell
-        }
-        cell.photo.image = image
+        cell.setLikes(likes: photos[indexPath.row].likes)
+        cell.photo.image = UIImage(data: photos[indexPath.row].data)
         cell.photo.setNeedsDisplay()
     
         return cell

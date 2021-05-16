@@ -15,26 +15,12 @@ class PhotoCollectionViewCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
-//        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action:#selector(imageTapped(tapGestureRecognizer:)))
-//        photo.isUserInteractionEnabled = true
-//        photo.addGestureRecognizer(tapGestureRecognizer)
     }
     
-//    @objc func imageTapped(tapGestureRecognizer: UITapGestureRecognizer)
-//    {
-//        let tappedImage = tapGestureRecognizer.view as! UIImageView
-//
-//        UIView.animate(withDuration: 4,
-//                       delay: 0,
-//                       usingSpringWithDamping: 0.5,
-//                       initialSpringVelocity: 0,
-//                       options: [],
-//                       animations: {
-//                        tappedImage.frame = CGRect(x: tappedImage.frame.origin.x, y: tappedImage.frame.origin.y, width: tappedImage.frame.width - 30, height: tappedImage.frame.height - 30)
-//        })
-//    }
-    
+    func setLikes(likes: Int) {
+        likeButton.setTitle("\(likes)", for: .normal)
+    }
+
     @IBAction func likeButtonTapped(_ sender: Any) {
                 
         UIView.transition(with: likeButton, duration: 0.4, options: .transitionFlipFromLeft, animations: {

@@ -21,38 +21,29 @@ class FriendTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
     }
+        
+    override func prepareForReuse() {
+        
+        self.viewModel = nil
+        self.fullNameLabel.text = ""
+        self.profileImage.image = nil
+    }
     
     func configureViewModel(viewModel vm: FriendViewModel) {
-        viewModel = vm
         
-        viewModel!.fullName.bind(to: fullNameLabel.rx.text).disposed(by: bag)
-        
-        viewModel!.profileImage.bind { [weak self] data in
-            guard let data = data else { return }
+        vm.fullName.bind(to: fullNameLabel.rx.text).disposed(by: bag)
+        vm.profilePhoto.bind { [weak self] data in
+            
             DispatchQueue.main.async { /// execute on main thread
+                guard let data = data else { return }
                 self?.profileImage.image = UIImage(data: data)
                 self?.profileImage.setNeedsDisplay()
             }
         }.disposed(by: bag)
+        
+        viewModel = vm
     }
     
-    func setProfileImage(with url: String) {
-        viewModel?.setProfileImage(with: url)
-    }
-    
-    func getPhotos() -> [UIImage?] {
-        let images: [UIImage?]? = viewModel?.photos.map {
-            guard let data = $0 else { return nil }
-            return UIImage(data: data)
-        }
-        
-        guard let photos = images else {
-            return []
-        }
-        
-        return photos
-    }
-
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 

@@ -11,7 +11,6 @@ class GroupTableViewCell: UITableViewCell {
 
     @IBOutlet weak var profileImageView: CustomImageView!
     @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var subtitleLabel: UILabel!
     
     var viewModel: GroupViewModel?
     
@@ -24,12 +23,12 @@ class GroupTableViewCell: UITableViewCell {
     }
     
     func configureViewModel(viewModel vm: GroupViewModel) {
+        
         viewModel = vm
         
-        viewModel!.title.bind(to: titleLabel.rx.text).disposed(by: viewModel!.bag)
-        viewModel!.subtitle.bind(to: subtitleLabel.rx.text).disposed(by: viewModel!.bag)
+        vm.name.bind(to: titleLabel.rx.text).disposed(by: viewModel!.bag)
         
-        viewModel!.image.bind { [weak self] data in
+        vm.photo.bind { [weak self] data in
             guard let data = data else { return }
             DispatchQueue.main.async { /// execute on main thread
                 self?.profileImageView.image = UIImage(data: data)
