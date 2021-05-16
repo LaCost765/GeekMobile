@@ -1,52 +1,70 @@
 //
 //  FriendViewModel.swift
-//  ClientVK
+//  GeekMobile
 //
-//  Created by Egor on 06.03.2021.
+//  Created by Egor on 25.04.2021.
 //
 
 import Foundation
 import RxSwift
+import RxRelay
 
-protocol FriendViewModelProtocol {
-    var model: FriendModel { get set }
-    var fullName: BehaviorSubject<String> { get }
-    var profileImage: BehaviorSubject<Data?> { get }
-}
-
-class FriendViewModel: FriendViewModelProtocol {
+class FriendViewModel: DisposeBagHolder {
     
-    var model: FriendModel
-    var fullName: BehaviorSubject<String>
-    var profileImage: BehaviorSubject<Data?>
-    var photos: [Data?] {
-        return model.userPhotos
-    }
-    
+    let model: FriendModel
+    var fullName: BehaviorRelay<String>
+    var profilePhoto: BehaviorSubject<Data?>
+    var photos: BehaviorRelay<[(data: Data, likes: Int)]>
+        
     init(model: FriendModel) {
         self.model = model
-        fullName = BehaviorSubject(value: model.getFullName())
-        profileImage = BehaviorSubject(value: model.profileImage)
+        self.fullName = BehaviorRelay<String>(value: "\(model.name) \(model.surname)")
+        self.profilePhoto = BehaviorSubject<Data?>(value: nil)
+        self.photos = BehaviorRelay<[(data: Data, likes: Int)]>(value: [])
         
-        // subscribe model on subjects changes
-        fullName.subscribe(onNext: { model.setFullName(fullName: $0) })
-        profileImage.subscribe(onNext: { model.profileImage = $0 })
+        super.init()
+
+        self.loadProfilePhoto()
     }
     
-    func setProfileImage(with url: String) {
-        if let url = URL(string: url) {
-            let task = URLSession.shared.dataTask(with: url) { [weak self] data, resp, err in
-                guard let data = data, err == nil else { return }
-                self?.profileImage.onNext(data)
-            }
-            
-            task.resume()
-        }
+    func loadProfilePhoto() {
+        
+        model.loadProfilePhoto()
+            .subscribe(onNext: { [weak self] data in
+                
+                guard let `self` = self else { return }
+                self.profilePhoto.onNext(data)
+            })
+            .disposed(by: bag)
     }
-    
-    func loadImages() {
-        DispatchQueue.global().async { [weak self] in
-            self?.model.loadImages()
+        
+    func loadPhotos() {
+        
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+
+            guard let `self` = self else { return }
+            self.model.loadPhotos()
+                .subscribe(onNext: { data in
+                    
+                    ParserJSON
+                        .getPhotosForUser(data: data)
+                        .subscribe(onNext: { photoModel in
+                            
+                            photoModel.data.subscribe(onNext: { photoData in
+                                
+                                guard let `photoData` = photoData else { return }
+                                
+                                let newTuple = (photoData, photoModel.likes)
+                                var arr = self.photos.value
+                                arr.append(newTuple)
+                                self.photos.accept(arr)
+                            })
+                            .disposed(by: self.bag)
+                        })
+                        .disposed(by: self.bag)
+                        
+                })
+                .disposed(by: self.bag)
         }
     }
 }

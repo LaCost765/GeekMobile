@@ -83,7 +83,8 @@ extension AuthVKViewController: WKNavigationDelegate {
         UserSession.shared.vkToken = token
         decisionHandler(.cancel)
         
-        let vc = storyboard?.instantiateViewController(identifier: "API_VC") as! RequestAPIViewController
-        self.present(vc, animated: true, completion: nil)
+        let vc = storyboard?.instantiateViewController(identifier: "MainTabBar") as! MainTabBarViewController
+        UIApplication.shared.windows.first?.rootViewController = vc
+        UIApplication.shared.windows.first?.makeKeyAndVisible()
     }
 }

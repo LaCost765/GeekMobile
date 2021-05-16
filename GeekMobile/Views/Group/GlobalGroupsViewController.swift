@@ -6,37 +6,78 @@
 //
 
 import UIKit
+import RxSwift
+import Alamofire
 
 class GlobalGroupsViewController: UITableViewController {
     
     @IBOutlet weak var searchBar: UISearchBar!
     
-    var groups: [GroupModel] = []
-    var filteredData: [GroupModel]!
-
+    var groups: [GroupViewModel] = []
+    private let bag = DisposeBag()
+    private let searchSubject = BehaviorSubject(value: "")
+    private let threadSafeAction = ThreadSafeAction(parallelsCount: 1)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        searchBar.delegate = self
+        loadGroupsWith()
+            .subscribe(onNext: { [weak self] data in
+                self?.parseGroups(data: data)
+            })
+            .disposed(by: bag)
         
-        self.groups = [
-            GroupModel(title: "GeekBrains", subtitle: "Образование", image: convertImageToData(named: "GeekBrains")),
-            GroupModel(title: "Apple", subtitle: "Технологии", image: convertImageToData(named: "Apple")),
-            GroupModel(title: "Лентач", subtitle: "СМИ", image: convertImageToData(named: "Lentach")),
-            GroupModel(title: "Книги", subtitle: "Литература", image: convertImageToData(named: "Books")),
-            GroupModel(title: "UFC", subtitle: "Спорт", image: convertImageToData(named: "UFC")),
-            GroupModel(title: "НИУ ВШЭ", subtitle: "Университет", image: convertImageToData(named: "HSE")),
-            GroupModel(title: "Лепра", subtitle: "Юмор", image: convertImageToData(named: "Lepra")),
-            GroupModel(title: "Meduza", subtitle: "СМИ", image: convertImageToData(named: "Meduza")),
+        searchBar.delegate = self
+        subscription()
+    }
+    
+    func subscription() {
+        
+        searchSubject.debounce(RxTimeInterval.milliseconds(500), scheduler: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] query in
+                
+                guard let `self` = self else { return }
+                
+                self.loadGroupsWith(searchQuery: query)
+                    .subscribe(onNext: { [weak self] data in
+                        self?.parseGroups(data: data)
+                    })
+                    .disposed(by: self.bag)
+            }).disposed(by: bag)
+    }
+    
+    func loadGroupsWith(searchQuery: String = " ") -> Observable<Data> {
+        
+        groups = []
+        let params: Parameters = [
+            VkAPI.Group.q.rawValue : searchQuery,
+            VkAPI.count.rawValue : 100,
+            VkAPI.token.rawValue : UserSession.shared.vkToken ?? "",
+            VkAPI.v.rawValue : VkAPI.Constants.v.rawValue
         ]
         
-        self.filteredData = self.groups
+        return NetworkManager.shared.makeRequest(url: "\(VkAPI.Constants.url.rawValue)/groups.search", params: params)
+    }
+    
+    func parseGroups(data: Data) {
         
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            
+            guard let `self` = self else { return }
+            
+            ParserJSON.getGroups(data: data)
+                .subscribe(onNext: { group in
+                    
+                    self.threadSafeAction.call {
+                        self.groups.append(GroupViewModel(model: group))
+                    }
+                    
+                    DispatchQueue.main.async { [weak self] in
+                        self?.tableView.reloadData()
+                    }
+                })
+                .disposed(by: self.bag)
+        }
     }
 
     // MARK: - Table view data source
@@ -48,21 +89,23 @@ class GlobalGroupsViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return filteredData.count
+        return threadSafeAction.call { groups.count }
     }
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "GlobalGroupCell", for: indexPath) as! GroupTableViewCell
         
-        cell.configureViewModel(viewModel: GroupViewModel(model: filteredData[indexPath.row]))
+        let cell = tableView.dequeueReusableCell(withIdentifier: "GlobalGroupCell", for: indexPath) as! GroupTableViewCell
+                let vm = threadSafeAction.call { groups[indexPath.row] }
+
+        cell.configureViewModel(viewModel: vm)
         
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        performSegue(withIdentifier: "addGroup", sender: filteredData[indexPath.row])
+//        tableView.deselectRow(at: indexPath, animated: true)
+//        performSegue(withIdentifier: "addGroup", sender: filteredData[indexPath.row])
     }
     
 
@@ -105,36 +148,28 @@ class GlobalGroupsViewController: UITableViewController {
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-        if segue.identifier == "addGroup" {
-            guard let userGroupsVC = segue.destination as? UserGroupsViewController,
-                  let group = sender as? GroupModel else {
-                return
-            }
-         
-            userGroupsVC.addNewGroup(group: group)
-        }
-    }
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        // Get the new view controller using segue.destination.
+//        // Pass the selected object to the new view controller.
+//        if segue.identifier == "addGroup" {
+//            guard let userGroupsVC = segue.destination as? UserGroupsViewController,
+//                  let group = sender as? GroupModel else {
+//                return
+//            }
+//
+//            //userGroupsVC.addNewGroup(group: group)
+//        }
+//    }
 }
 
 extension GlobalGroupsViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        
+    
         if searchText == "" {
-            filteredData = groups
+            searchSubject.onNext(" ")
         } else {
-            filteredData = []
-            for group in groups {
-                 
-                if group.title.lowercased().contains(searchText.lowercased()) {
-                    filteredData.append(group)
-                }
-            }
+            searchSubject.onNext(searchText)
         }
-        
-        self.tableView.reloadData()
     }
 }

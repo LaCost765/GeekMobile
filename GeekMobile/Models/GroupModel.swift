@@ -6,21 +6,31 @@
 //
 
 import Foundation
+import RxSwift
 
-protocol GroupModelProtocol {
-    var image: Data? { get set }
-    var title: String { get set }
-    var subtitle: String { get set }
+protocol GroupModel {
+    var id: Int { get set }
+    var name: String { get set }
+    var photoUrl: String { get set }
+    
+    func loadPhoto() -> Observable<Data>
 }
 
-class GroupModel: GroupModelProtocol {
-    var image: Data?
-    var title: String
-    var subtitle: String
+class GroupModelImpl: GroupModel {
     
-    init(title: String, subtitle: String, image: Data? = nil) {
-        self.title = title
-        self.subtitle = subtitle
-        self.image = image
+    var id: Int
+    var name: String
+    var photoUrl: String
+    
+    init(id: Int, name: String, photoUrl: String) {
+        self.id = id
+        self.name = name
+        self.photoUrl = photoUrl
     }
+    
+    func loadPhoto() -> Observable<Data> {
+        
+        return NetworkManager.shared.makeRequest(url: photoUrl)
+    }
+    
 }
