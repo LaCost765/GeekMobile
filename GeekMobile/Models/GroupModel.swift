@@ -6,21 +6,34 @@
 //
 
 import Foundation
+import RxSwift
+import RealmSwift
 
-protocol GroupModelProtocol {
-    var image: Data? { get set }
-    var title: String { get set }
-    var subtitle: String { get set }
-}
+//protocol GroupModel: Object, Decodable {
+//    dynamic var id: Int { get set }
+//    dynamic var name: String { get set }
+//    dynamic var photoUrl: String { get set }
+//
+//    func loadPhoto() -> Observable<Data>
+//}
 
-class GroupModel: GroupModelProtocol {
-    var image: Data?
-    var title: String
-    var subtitle: String
+class GroupModel: Object, Decodable {
     
-    init(title: String, subtitle: String, image: Data? = nil) {
-        self.title = title
-        self.subtitle = subtitle
-        self.image = image
+    @objc dynamic var id: Int = 0
+    @objc dynamic var name: String = ""
+    @objc dynamic var photoUrl: String = ""
+    
+    override init() { }
+    
+    init(id: Int, name: String, photoUrl: String) {
+        self.id = id
+        self.name = name
+        self.photoUrl = photoUrl
     }
+    
+    func loadPhoto() -> Observable<Data> {
+        
+        return NetworkManager.shared.makeRequest(url: photoUrl)
+    }
+    
 }

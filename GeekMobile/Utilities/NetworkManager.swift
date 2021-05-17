@@ -12,6 +12,7 @@ import Alamofire
 class NetworkManager {
     
     static let shared = NetworkManager()
+    var i = 0
     
     private init() {
         
@@ -32,6 +33,11 @@ class NetworkManager {
             
             AF.request(url, parameters: params).response { response in
                 
+                if (response.request!.url!.absoluteString.contains("photos.getAll")) {
+                    //print(response.request!)
+                    //print(self.i)
+                    //self.i += 1
+                }
                 if let error = response.error {
                     print("ERROR: \(error.localizedDescription)")
                     return

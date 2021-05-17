@@ -14,4 +14,5 @@ target 'GeekMobile' do
   pod 'Firebase/Storage'
   pod 'Alamofire'
   pod 'SwiftyJSON'
+  pod 'RealmSwift'
 end

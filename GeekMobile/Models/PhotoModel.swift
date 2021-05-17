@@ -6,8 +6,25 @@
 //
 
 import Foundation
+import RxSwift
+import RealmSwift
 
-protocol PhotoModel {
-    var id: String { get set }
-    var likes: Int { get set }
+class PhotoModel: Object, Decodable {
+    
+    @objc dynamic var likes: Int = 0
+    @objc dynamic var data: Data?
+    @objc dynamic var url: String = ""
+    
+    override init() { }
+    
+    init(url: String, likes: Int) {
+        
+        self.likes = likes
+        self.url = url
+    }
+    
+    func loadPhotoData() -> Observable<Data> {
+        
+        return NetworkManager.shared.makeRequest(url: url)
+    }
 }

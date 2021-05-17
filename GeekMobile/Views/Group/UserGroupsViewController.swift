@@ -6,19 +6,79 @@
 //
 
 import UIKit
+import Alamofire
+import RxSwift
+import RealmSwift
 
 class UserGroupsViewController: UITableViewController {
     
-    private var groups: [GroupModel] = []
-    
+    private var groups: [GroupViewModel] = []
+    private let bag = DisposeBag()
+    private let threadSafeAction = ThreadSafeAction(parallelsCount: 1)
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        loadGroups()
+            .subscribe(onNext: { [weak self] data in
+                self?.parseGroups(data: data)
+            })
+            .disposed(by: bag)
+    }
+    
+    func parseGroups(data: Data) {
+        
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            
+            guard let `self` = self else { return }
+            self.deleteGroupsFromRealm()
+            
+            ParserJSON.getGroups(data: data)
+                .subscribe(onNext: { group in
+                    
+                    self.threadSafeAction.call {
+                        self.storeGroupToRealm(group: group)
+                        self.groups.append(GroupViewModel(model: group))
+                    }
+                    
+                    DispatchQueue.main.async { [weak self] in
+                        self?.tableView.reloadData()
+                    }
+                })
+                .disposed(by: self.bag)
+        }
+    }
+    
+    func deleteGroupsFromRealm() {
+        do {
+            let realm = try Realm()
+            let groupsArray = realm.objects(GroupModel.self)
+            try realm.write {
+                realm.delete(groupsArray)
+            }
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    func storeGroupToRealm(group: GroupModel) {
+        do {
+            let realm = try Realm()
+            try realm.write { realm.add(group) }
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    func loadGroups() -> Observable<Data> {
+        
+        let params: Parameters = [
+            VkAPI.Group.extended.rawValue : "1",
+            VkAPI.token.rawValue : UserSession.shared.vkToken ?? "",
+            VkAPI.v.rawValue : VkAPI.Constants.v.rawValue
+        ]
+        
+        return NetworkManager.shared.makeRequest(url: "\(VkAPI.Constants.url.rawValue)/groups.get", params: params)
     }
 
     // MARK: - Table view data source
@@ -30,30 +90,21 @@ class UserGroupsViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return groups.count
+        return threadSafeAction.call { groups.count }
     }
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "GroupCell", for: indexPath) as! GroupTableViewCell
+        
+        let vm = threadSafeAction.call { groups[indexPath.row] }
 
-        cell.configureViewModel(viewModel: GroupViewModel(model: groups[indexPath.row]))
+        cell.configureViewModel(viewModel: vm)
 
         return cell
     }
     
-    @IBAction func addGroup(segue: UIStoryboardSegue) {
-        // ?_?
-    }
-    
-    func addNewGroup(group: GroupModel) {
-        if !groups.contains(where: { $0.title == group.title }) {
-            groups.append(group)
-            tableView.reloadData()
-        }
-    }
-    
-
     /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -64,15 +115,15 @@ class UserGroupsViewController: UITableViewController {
 
     
     // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            groups.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
+//    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+//        if editingStyle == .delete {
+//            // Delete the row from the data source
+//            groups.remove(at: indexPath.row)
+//            tableView.deleteRows(at: [indexPath], with: .fade)
+//        } else if editingStyle == .insert {
+//            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+//        }
+//    }
     
 
     /*

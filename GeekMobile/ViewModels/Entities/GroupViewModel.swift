@@ -7,33 +7,32 @@
 
 import Foundation
 import RxSwift
+import RxRelay
 
-protocol GroupViewModelProtocol {
-    var model: GroupModel { get }
-    var title: BehaviorSubject<String> { get set }
-    var subtitle: BehaviorSubject<String> { get set }
-    var image: BehaviorSubject<Data?> { get set }
-}
-
-class GroupViewModel: GroupViewModelProtocol {
+class GroupViewModel: DisposeBagHolder {
     
-    var model: GroupModel
-    var title: BehaviorSubject<String>
-    var subtitle: BehaviorSubject<String>
-    var image: BehaviorSubject<Data?>
-    let bag: DisposeBag
+    let model: GroupModel
+    var name: BehaviorRelay<String>
+    var photo: BehaviorSubject<Data?>
         
     init(model: GroupModel) {
         self.model = model
+        self.name = BehaviorRelay<String>(value: model.name)
+        self.photo = BehaviorSubject<Data?>(value: nil)
         
-        bag = DisposeBag()
-        title = BehaviorSubject(value: model.title)
-        subtitle = BehaviorSubject(value: model.subtitle)
-        image = BehaviorSubject(value: model.image)
+        super.init()
+
+        self.loadPhoto()
+    }
+    
+    func loadPhoto() {
         
-        // subscribe model on subjects changes
-        title.subscribe(onNext: { model.title = $0 })
-        subtitle.subscribe(onNext: { model.subtitle = $0 })
-        image.subscribe(onNext: { model.image = $0 })
+        model.loadPhoto()
+            .subscribe(onNext: { [weak self] data in
+                
+                guard let `self` = self else { return }
+                self.photo.onNext(data)
+            })
+            .disposed(by: bag)
     }
 }

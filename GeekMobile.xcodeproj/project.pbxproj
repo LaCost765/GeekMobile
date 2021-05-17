@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		340D02C8AF4453221AFA5E80 /* Pods_GeekMobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C42BAF6CD626156C009A9268 /* Pods_GeekMobile.framework */; };
 		74058F932617521200853A64 /* RotatePresentAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74058F922617521200853A64 /* RotatePresentAnimator.swift */; };
 		74058F972617521C00853A64 /* RotateDismissAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74058F962617521C00853A64 /* RotateDismissAnimator.swift */; };
 		74058F9A2617553C00853A64 /* RotateInteractiveTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74058F992617553C00853A64 /* RotateInteractiveTransition.swift */; };
@@ -21,10 +22,8 @@
 		7422CDD22629C15F00B1E1EF /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7422CDD12629C15F00B1E1EF /* NetworkManager.swift */; };
 		7422CDD52629C1A900B1E1EF /* AuthVKViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7422CDD42629C1A900B1E1EF /* AuthVKViewController.swift */; };
 		74288E6E25F9DB9A0058DC2C /* RxExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74288E6D25F9DB9A0058DC2C /* RxExtensions.swift */; };
-		7435775925F2EFB300380C6D /* FriendViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7435775825F2EFB300380C6D /* FriendViewModel.swift */; };
 		7443E10825F2EC5300445507 /* FriendTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7443E10725F2EC5300445507 /* FriendTableViewCell.swift */; };
 		7443E10B25F2ED2C00445507 /* FriendsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7443E10A25F2ED2C00445507 /* FriendsTableViewController.swift */; };
-		7443E10E25F2EDC900445507 /* FriendModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7443E10D25F2EDC900445507 /* FriendModel.swift */; };
 		7443EE2B25F56FF6001713A9 /* UserGroupsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7443EE2A25F56FF6001713A9 /* UserGroupsViewController.swift */; };
 		7443EE2F25F570C6001713A9 /* GroupTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7443EE2E25F570C6001713A9 /* GroupTableViewCell.swift */; };
 		7443EE3225F5712C001713A9 /* GroupModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7443EE3125F5712C001713A9 /* GroupModel.swift */; };
@@ -41,6 +40,7 @@
 		74585E2225FC05B9009D3775 /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74585E2125FC05B9009D3775 /* MainTabBarViewController.swift */; };
 		74585E2625FC1CAC009D3775 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74585E2525FC1CAC009D3775 /* ProfileViewController.swift */; };
 		746D309725F428C50086F0E3 /* PhotoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746D309625F428C50086F0E3 /* PhotoCollectionViewCell.swift */; };
+		74764FDA265152C30040A5E4 /* ThreadSafeAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74764FD9265152C30040A5E4 /* ThreadSafeAction.swift */; };
 		7478855725FF632500B3A798 /* CurrentUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7478855625FF632500B3A798 /* CurrentUser.swift */; };
 		747888AD2628973000FCA954 /* UserSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747888AC2628973000FCA954 /* UserSession.swift */; };
 		7481B5A9262EB15C00960060 /* RequestAPIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7481B5A8262EB15C00960060 /* RequestAPIViewController.swift */; };
@@ -50,7 +50,12 @@
 		74BDE4CD25F9334100DEC5E2 /* UITitleTextErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74BDE4CC25F9334100DEC5E2 /* UITitleTextErrorView.swift */; };
 		74BE126626186D1500A6F4D6 /* CustomSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74BE126526186D1500A6F4D6 /* CustomSegue.swift */; };
 		74C5AB66260151CF00840259 /* CustomImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C5AB65260151CF00840259 /* CustomImageView.swift */; };
+		74C83C822635CC5E00C64371 /* ParserJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C83C812635CC5E00C64371 /* ParserJSON.swift */; };
+		74C83C852635D3F700C64371 /* VkAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C83C842635D3F700C64371 /* VkAPI.swift */; };
 		74CCC31A25F58510003F0C0C /* ViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74CCC31925F58510003F0C0C /* ViewControllerExtensions.swift */; };
+		74D05E932635EEA90019E23C /* FriendModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D05E922635EEA90019E23C /* FriendModel.swift */; };
+		74D05E962635F7F30019E23C /* DisposeBagHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D05E952635F7F30019E23C /* DisposeBagHolder.swift */; };
+		74D05E992635FB290019E23C /* FriendViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D05E982635FB290019E23C /* FriendViewModel.swift */; };
 		74D1B9DE25F581D800400B67 /* GlobalGroupsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D1B9DD25F581D800400B67 /* GlobalGroupsViewController.swift */; };
 		74E1FB3826162A8A00C034A8 /* AnimatedPhotosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E1FB3726162A8A00C034A8 /* AnimatedPhotosViewController.swift */; };
 		74F1B56C25F91B3600F5A2EF /* SignUpModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F1B56B25F91B3600F5A2EF /* SignUpModel.swift */; };
@@ -62,6 +67,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4A6D94B87B94B7F82F3A88A2 /* Pods-GeekMobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GeekMobile.release.xcconfig"; path = "Target Support Files/Pods-GeekMobile/Pods-GeekMobile.release.xcconfig"; sourceTree = "<group>"; };
 		74058F922617521200853A64 /* RotatePresentAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotatePresentAnimator.swift; sourceTree = "<group>"; };
 		74058F962617521C00853A64 /* RotateDismissAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotateDismissAnimator.swift; sourceTree = "<group>"; };
 		74058F992617553C00853A64 /* RotateInteractiveTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotateInteractiveTransition.swift; sourceTree = "<group>"; };
@@ -76,10 +82,8 @@
 		7422CDD12629C15F00B1E1EF /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		7422CDD42629C1A900B1E1EF /* AuthVKViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthVKViewController.swift; sourceTree = "<group>"; };
 		74288E6D25F9DB9A0058DC2C /* RxExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxExtensions.swift; sourceTree = "<group>"; };
-		7435775825F2EFB300380C6D /* FriendViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendViewModel.swift; sourceTree = "<group>"; };
 		7443E10725F2EC5300445507 /* FriendTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendTableViewCell.swift; sourceTree = "<group>"; };
 		7443E10A25F2ED2C00445507 /* FriendsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsTableViewController.swift; sourceTree = "<group>"; };
-		7443E10D25F2EDC900445507 /* FriendModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendModel.swift; sourceTree = "<group>"; };
 		7443EE2A25F56FF6001713A9 /* UserGroupsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserGroupsViewController.swift; sourceTree = "<group>"; };
 		7443EE2E25F570C6001713A9 /* GroupTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupTableViewCell.swift; sourceTree = "<group>"; };
 		7443EE3125F5712C001713A9 /* GroupModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupModel.swift; sourceTree = "<group>"; };
@@ -98,6 +102,7 @@
 		74585E2125FC05B9009D3775 /* MainTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarViewController.swift; sourceTree = "<group>"; };
 		74585E2525FC1CAC009D3775 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		746D309625F428C50086F0E3 /* PhotoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollectionViewCell.swift; sourceTree = "<group>"; };
+		74764FD9265152C30040A5E4 /* ThreadSafeAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadSafeAction.swift; sourceTree = "<group>"; };
 		7478855625FF632500B3A798 /* CurrentUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUser.swift; sourceTree = "<group>"; };
 		747888AC2628973000FCA954 /* UserSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSession.swift; sourceTree = "<group>"; };
 		7481B5A8262EB15C00960060 /* RequestAPIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestAPIViewController.swift; sourceTree = "<group>"; };
@@ -107,7 +112,12 @@
 		74BDE4CC25F9334100DEC5E2 /* UITitleTextErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITitleTextErrorView.swift; sourceTree = "<group>"; };
 		74BE126526186D1500A6F4D6 /* CustomSegue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSegue.swift; sourceTree = "<group>"; };
 		74C5AB65260151CF00840259 /* CustomImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomImageView.swift; sourceTree = "<group>"; };
+		74C83C812635CC5E00C64371 /* ParserJSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParserJSON.swift; sourceTree = "<group>"; };
+		74C83C842635D3F700C64371 /* VkAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VkAPI.swift; sourceTree = "<group>"; };
 		74CCC31925F58510003F0C0C /* ViewControllerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerExtensions.swift; sourceTree = "<group>"; };
+		74D05E922635EEA90019E23C /* FriendModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendModel.swift; sourceTree = "<group>"; };
+		74D05E952635F7F30019E23C /* DisposeBagHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisposeBagHolder.swift; sourceTree = "<group>"; };
+		74D05E982635FB290019E23C /* FriendViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendViewModel.swift; sourceTree = "<group>"; };
 		74D1B9DD25F581D800400B67 /* GlobalGroupsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalGroupsViewController.swift; sourceTree = "<group>"; };
 		74E1FB3726162A8A00C034A8 /* AnimatedPhotosViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedPhotosViewController.swift; sourceTree = "<group>"; };
 		74F1B56B25F91B3600F5A2EF /* SignUpModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpModel.swift; sourceTree = "<group>"; };
@@ -116,6 +126,8 @@
 		74FD78C325FCE0C500C61A5E /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		74FD78C925FCFDBB00C61A5E /* PhotoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModel.swift; sourceTree = "<group>"; };
 		74FD78CC25FCFF6300C61A5E /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
+		B54AE7DC156BAFF03D96542A /* Pods-GeekMobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GeekMobile.debug.xcconfig"; path = "Target Support Files/Pods-GeekMobile/Pods-GeekMobile.debug.xcconfig"; sourceTree = "<group>"; };
+		C42BAF6CD626156C009A9268 /* Pods_GeekMobile.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GeekMobile.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,6 +135,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				340D02C8AF4453221AFA5E80 /* Pods_GeekMobile.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -132,6 +145,8 @@
 		59DE0F6F4CC14DD0E1680036 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
+				B54AE7DC156BAFF03D96542A /* Pods-GeekMobile.debug.xcconfig */,
+				4A6D94B87B94B7F82F3A88A2 /* Pods-GeekMobile.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -139,9 +154,9 @@
 		74058F8A2617490100853A64 /* Entities */ = {
 			isa = PBXGroup;
 			children = (
-				7435775825F2EFB300380C6D /* FriendViewModel.swift */,
 				74FD78C325FCE0C500C61A5E /* ProfileViewModel.swift */,
 				7443EE3425F571EB001713A9 /* GroupViewModel.swift */,
+				74D05E982635FB290019E23C /* FriendViewModel.swift */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -218,6 +233,7 @@
 				74485B8425EA7AD600EA87E0 /* GeekMobile */,
 				74485B8325EA7AD600EA87E0 /* Products */,
 				59DE0F6F4CC14DD0E1680036 /* Pods */,
+				967CC50F5E439EF4705EC373 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -257,12 +273,12 @@
 			isa = PBXGroup;
 			children = (
 				74F1B56A25F91B1A00F5A2EF /* Authentification */,
-				7443E10D25F2EDC900445507 /* FriendModel.swift */,
 				7443EE3125F5712C001713A9 /* GroupModel.swift */,
 				74FD78C925FCFDBB00C61A5E /* PhotoModel.swift */,
 				741CC96225FD0F3300952E15 /* GeekUser.swift */,
 				7478855625FF632500B3A798 /* CurrentUser.swift */,
 				740A997D260CA9F7002E8FC0 /* NewsItemModel.swift */,
+				74D05E922635EEA90019E23C /* FriendModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -369,8 +385,20 @@
 				74FD78CC25FCFF6300C61A5E /* FirebaseManager.swift */,
 				747888AC2628973000FCA954 /* UserSession.swift */,
 				7422CDD12629C15F00B1E1EF /* NetworkManager.swift */,
+				74C83C812635CC5E00C64371 /* ParserJSON.swift */,
+				74C83C842635D3F700C64371 /* VkAPI.swift */,
+				74D05E952635F7F30019E23C /* DisposeBagHolder.swift */,
+				74764FD9265152C30040A5E4 /* ThreadSafeAction.swift */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		967CC50F5E439EF4705EC373 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C42BAF6CD626156C009A9268 /* Pods_GeekMobile.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -380,9 +408,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 74485B9625EA7AD600EA87E0 /* Build configuration list for PBXNativeTarget "GeekMobile" */;
 			buildPhases = (
+				172993BC2AA46641299885F1 /* [CP] Check Pods Manifest.lock */,
 				74485B7E25EA7AD600EA87E0 /* Sources */,
 				74485B7F25EA7AD600EA87E0 /* Frameworks */,
 				74485B8025EA7AD600EA87E0 /* Resources */,
+				822A8A403701327A0D3F87B2 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -439,6 +469,48 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		172993BC2AA46641299885F1 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-GeekMobile-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		822A8A403701327A0D3F87B2 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-GeekMobile/Pods-GeekMobile-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-GeekMobile/Pods-GeekMobile-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-GeekMobile/Pods-GeekMobile-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		74485B7E25EA7AD600EA87E0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -452,9 +524,10 @@
 				7421298125F8F1020057E05C /* UIScrollableViewController.swift in Sources */,
 				741CC96325FD0F3300952E15 /* GeekUser.swift in Sources */,
 				74058F9A2617553C00853A64 /* RotateInteractiveTransition.swift in Sources */,
+				74D05E992635FB290019E23C /* FriendViewModel.swift in Sources */,
+				74D05E962635F7F30019E23C /* DisposeBagHolder.swift in Sources */,
 				747888AD2628973000FCA954 /* UserSession.swift in Sources */,
 				74485B8625EA7AD600EA87E0 /* AppDelegate.swift in Sources */,
-				7435775925F2EFB300380C6D /* FriendViewModel.swift in Sources */,
 				74485BA025EA7FC800EA87E0 /* LoginModel.swift in Sources */,
 				74058F9D2617558900853A64 /* RotateNavigationControllerDelegate.swift in Sources */,
 				74FD78C425FCE0C500C61A5E /* ProfileViewModel.swift in Sources */,
@@ -467,6 +540,7 @@
 				74585E2225FC05B9009D3775 /* MainTabBarViewController.swift in Sources */,
 				740A9981260CAFE8002E8FC0 /* NewsItemTableViewCell.swift in Sources */,
 				740A997E260CA9F7002E8FC0 /* NewsItemModel.swift in Sources */,
+				74D05E932635EEA90019E23C /* FriendModel.swift in Sources */,
 				7478855725FF632500B3A798 /* CurrentUser.swift in Sources */,
 				7443E10825F2EC5300445507 /* FriendTableViewCell.swift in Sources */,
 				74B20AFE25F8D9B40065BB9F /* SignUpViewController.swift in Sources */,
@@ -475,11 +549,11 @@
 				7443EE2B25F56FF6001713A9 /* UserGroupsViewController.swift in Sources */,
 				74485BA725EA87DD00EA87E0 /* LoginViewController.swift in Sources */,
 				74288E6E25F9DB9A0058DC2C /* RxExtensions.swift in Sources */,
+				74C83C822635CC5E00C64371 /* ParserJSON.swift in Sources */,
 				740A997B260CA99A002E8FC0 /* NewsTableViewController.swift in Sources */,
 				74B20B0225F8DC0C0065BB9F /* UIPaddingLabel.swift in Sources */,
 				74FD78CA25FCFDBB00C61A5E /* PhotoModel.swift in Sources */,
 				74BDE4CA25F924E200DEC5E2 /* SignUpViewModel.swift in Sources */,
-				7443E10E25F2EDC900445507 /* FriendModel.swift in Sources */,
 				7443E10B25F2ED2C00445507 /* FriendsTableViewController.swift in Sources */,
 				74485B8825EA7AD600EA87E0 /* SceneDelegate.swift in Sources */,
 				74F1B56C25F91B3600F5A2EF /* SignUpModel.swift in Sources */,
@@ -487,6 +561,8 @@
 				7443EE2F25F570C6001713A9 /* GroupTableViewCell.swift in Sources */,
 				74449B2A25F3FA210071272A /* PhotosViewController.swift in Sources */,
 				74058F972617521C00853A64 /* RotateDismissAnimator.swift in Sources */,
+				74C83C852635D3F700C64371 /* VkAPI.swift in Sources */,
+				74764FDA265152C30040A5E4 /* ThreadSafeAction.swift in Sources */,
 				7481B5A9262EB15C00960060 /* RequestAPIViewController.swift in Sources */,
 				74058FA02617561700853A64 /* RotateNavigationController.swift in Sources */,
 				74CCC31A25F58510003F0C0C /* ViewControllerExtensions.swift in Sources */,
@@ -635,11 +711,13 @@
 		};
 		74485B9725EA7AD600EA87E0 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B54AE7DC156BAFF03D96542A /* Pods-GeekMobile.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 49B53529R9;
+				"HEADER_SEARCH_PATHS[arch=*]" = "$(SRCROOT)/Pods/**";
 				INFOPLIST_FILE = GeekMobile/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -654,11 +732,13 @@
 		};
 		74485B9825EA7AD600EA87E0 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4A6D94B87B94B7F82F3A88A2 /* Pods-GeekMobile.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 49B53529R9;
+				"HEADER_SEARCH_PATHS[arch=*]" = "$(SRCROOT)/Pods/**";
 				INFOPLIST_FILE = GeekMobile/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

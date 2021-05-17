@@ -1,68 +1,48 @@
 //
 //  FriendModel.swift
-//  ClientVK
+//  GeekMobile
 //
-//  Created by Egor on 06.03.2021.
+//  Created by Egor on 25.04.2021.
 //
 
 import Foundation
+import RxSwift
+import Alamofire
+import RealmSwift
 
-protocol FriendProtocol {
-    var name: String { get set }
-    var surname: String { get set }
-    var profileImage: Data? { get set }
-    var userPhotos: [Data?] { get set }
-    var photosCount: Int { get set }
-}
-
-class FriendModel: FriendProtocol {
+class FriendModel: Object, Decodable {
     
-    var name: String
-    var surname: String
-    var profileImage: Data?
-    var userPhotos: [Data?]  = []
-    var photosCount: Int
-    private let imagesUrl = "https://picsum.photos/300"
+    @objc dynamic var id: String = ""
+    @objc dynamic var name: String = ""
+    @objc dynamic var surname: String = ""
+    @objc dynamic var profileImageURL: String = ""
+        
+    override init() { }
     
-    init(name: String, surname: String, photosCount: Int = 0, image: Data? = nil) {
+    init(name: String, surname: String, id: String, profileImageURL: String) {
         self.name = name
         self.surname = surname
-        self.profileImage = image
-        self.photosCount = photosCount
+        self.id = id
+        self.profileImageURL = profileImageURL
     }
     
-    func getFullName() -> String {
-        return "\(name) \(surname)"
-    }
-    
-    func setFullName(fullName: String) {
-        let pair = fullName.components(separatedBy: " ")
-        if pair.count == 2 {
-            name = pair[0]
-            surname = pair[1]
-        } else {
-            print("Incorrect full name: \(fullName)")
-        }
-    }
-    
-    func loadImages() {
-
-        if self.userPhotos.count < self.photosCount {
-            loadImage(from: imagesUrl)
-        }
-    }
-    
-    func loadImage(from url: String) {
+    func loadProfilePhoto() -> Observable<Data> {
         
-        if let url = URL(string: url) {
-            
-            let task = URLSession.shared.dataTask(with: url) { [weak self] data, resp, err in
-                guard let data = data, err == nil else { return }
-                self?.userPhotos.append(data)
-                self?.loadImages()
-            }
-            
-            task.resume()
-        }
+        return NetworkManager.shared.makeRequest(url: profileImageURL)
     }
+    
+    /// Load photos with urls in photosURLs property
+    func loadPhotos() -> Observable<Data> {
+
+        let params: Parameters = [
+            VkAPI.Photo.id.rawValue : self.id,
+            VkAPI.Photo.extended.rawValue : "1",
+            VkAPI.token.rawValue : UserSession.shared.vkToken ?? "",
+            VkAPI.v.rawValue : VkAPI.Constants.v.rawValue
+        ]
+        
+        return NetworkManager.shared.makeRequest(url: "\(VkAPI.Constants.url.rawValue)/photos.getAll", params: params)
+    }
+    
+    
 }
