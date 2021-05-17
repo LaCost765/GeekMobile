@@ -27,7 +27,7 @@ class ParserJSON {
                     let id = group[VkAPI.Group.id.rawValue].int ?? 0
                     let photo = group[VkAPI.Group.photo.rawValue].string ?? ""
                     
-                    let model = GroupModelImpl(id: id, name: name, photoUrl: photo)
+                    let model = GroupModel(id: id, name: name, photoUrl: photo)
                     observer.onNext(model)
                 }
             observer.onCompleted()
@@ -53,7 +53,7 @@ class ParserJSON {
                     let id = friend[VkAPI.Friend.id.rawValue].int ?? 0
                     let profilePhotoUrl = friend[VkAPI.Friend.photo.rawValue].string ?? ""
                     
-                    let model = FriendModelImpl(name: name, surname: surname, id: String(id), profileImageURL: profilePhotoUrl)
+                    let model = FriendModel(name: name, surname: surname, id: String(id), profileImageURL: profilePhotoUrl)
                     observer.onNext(model)
                 }
             observer.onCompleted()
@@ -81,7 +81,7 @@ class ParserJSON {
                     guard let url = sizeData[VkAPI.Photo.url.rawValue].string else { return }
                     guard let likes = photoObject["likes"]["count"].int else { return }
                     
-                    observer.onNext(PhotoModelImpl(url: url, likes: likes))
+                    observer.onNext(PhotoModel(url: url, likes: likes))
                 }
             print()
             observer.onCompleted()

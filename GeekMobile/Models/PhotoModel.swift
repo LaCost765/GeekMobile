@@ -7,31 +7,23 @@
 
 import Foundation
 import RxSwift
+import RealmSwift
 
-protocol PhotoModel {
-    var likes: Int { get set }
-    var data: BehaviorSubject<Data?> { get set }
-}
-
-class PhotoModelImpl: PhotoModel {
+class PhotoModel: Object, Decodable {
     
-    var likes: Int
-    var data: BehaviorSubject<Data?>
-    var bag: DisposeBag = DisposeBag()
+    @objc dynamic var likes: Int = 0
+    @objc dynamic var data: Data?
+    @objc dynamic var url: String = ""
+    
+    override init() { }
     
     init(url: String, likes: Int) {
         
-        self.data = BehaviorSubject<Data?>(value: nil)
         self.likes = likes
-        
-        self.loadPhotoData(url: url)
-            .subscribe(onNext: { [weak self] data in
-                self?.data.onNext(data)
-            })
-            .disposed(by: bag)
+        self.url = url
     }
     
-    private func loadPhotoData(url: String) -> Observable<Data> {
+    func loadPhotoData() -> Observable<Data> {
         
         return NetworkManager.shared.makeRequest(url: url)
     }

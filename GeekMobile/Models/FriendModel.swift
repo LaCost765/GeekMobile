@@ -8,25 +8,16 @@
 import Foundation
 import RxSwift
 import Alamofire
+import RealmSwift
 
-protocol FriendModel {
-    var id: String { get set }
-    var name: String { get set }
-    var surname: String { get set }
-    var profileImageURL: String { get set }
-    var photosURLs: [String] { get set }
+class FriendModel: Object, Decodable {
     
-    func loadProfilePhoto() -> Observable<Data>
-    func loadPhotos() -> Observable<Data>
-}
-
-class FriendModelImpl: DisposeBagHolder, FriendModel {
-    
-    var id: String
-    var name: String
-    var surname: String
-    var profileImageURL: String
-    var photosURLs: [String] = []
+    @objc dynamic var id: String = ""
+    @objc dynamic var name: String = ""
+    @objc dynamic var surname: String = ""
+    @objc dynamic var profileImageURL: String = ""
+        
+    override init() { }
     
     init(name: String, surname: String, id: String, profileImageURL: String) {
         self.name = name

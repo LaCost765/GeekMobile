@@ -717,6 +717,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 49B53529R9;
+				"HEADER_SEARCH_PATHS[arch=*]" = "$(SRCROOT)/Pods/**";
 				INFOPLIST_FILE = GeekMobile/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -737,6 +738,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 49B53529R9;
+				"HEADER_SEARCH_PATHS[arch=*]" = "$(SRCROOT)/Pods/**";
 				INFOPLIST_FILE = GeekMobile/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

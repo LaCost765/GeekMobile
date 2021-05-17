@@ -7,20 +7,23 @@
 
 import Foundation
 import RxSwift
+import RealmSwift
 
-protocol GroupModel {
-    var id: Int { get set }
-    var name: String { get set }
-    var photoUrl: String { get set }
-    
-    func loadPhoto() -> Observable<Data>
-}
+//protocol GroupModel: Object, Decodable {
+//    dynamic var id: Int { get set }
+//    dynamic var name: String { get set }
+//    dynamic var photoUrl: String { get set }
+//
+//    func loadPhoto() -> Observable<Data>
+//}
 
-class GroupModelImpl: GroupModel {
+class GroupModel: Object, Decodable {
     
-    var id: Int
-    var name: String
-    var photoUrl: String
+    @objc dynamic var id: Int = 0
+    @objc dynamic var name: String = ""
+    @objc dynamic var photoUrl: String = ""
+    
+    override init() { }
     
     init(id: Int, name: String, photoUrl: String) {
         self.id = id

@@ -8,6 +8,7 @@
 import UIKit
 import Alamofire
 import RxSwift
+import RealmSwift
 
 class UserGroupsViewController: UITableViewController {
     
@@ -30,11 +31,13 @@ class UserGroupsViewController: UITableViewController {
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             
             guard let `self` = self else { return }
+            self.deleteGroupsFromRealm()
             
             ParserJSON.getGroups(data: data)
                 .subscribe(onNext: { group in
                     
                     self.threadSafeAction.call {
+                        self.storeGroupToRealm(group: group)
                         self.groups.append(GroupViewModel(model: group))
                     }
                     
@@ -43,6 +46,27 @@ class UserGroupsViewController: UITableViewController {
                     }
                 })
                 .disposed(by: self.bag)
+        }
+    }
+    
+    func deleteGroupsFromRealm() {
+        do {
+            let realm = try Realm()
+            let groupsArray = realm.objects(GroupModel.self)
+            try realm.write {
+                realm.delete(groupsArray)
+            }
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    func storeGroupToRealm(group: GroupModel) {
+        do {
+            let realm = try Realm()
+            try realm.write { realm.add(group) }
+        } catch {
+            print(error.localizedDescription)
         }
     }
     

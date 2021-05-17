@@ -12,7 +12,7 @@ private let reuseIdentifier = "PhotoCell"
 
 class PhotosViewController: UICollectionViewController {
     
-    var photos: [(data: Data, likes: Int)] = []
+    var photos: [PhotoModel] = []
     
     var viewModel: FriendViewModel?
     var bag = DisposeBag()
@@ -65,7 +65,7 @@ class PhotosViewController: UICollectionViewController {
             let frame = CGRect(x: cell.frame.origin.x, y: cell.frame.origin.y + navBarHeight, width: cell.frame.width, height: cell.frame.height)
             
             customSegue.startFrame = frame
-            animatedVC.images = photos.map { UIImage(data: $0.data) }
+            animatedVC.images = photos.map { UIImage(data: $0.data!) }
             animatedVC.currentImageIndex = collectionView.indexPath(for: cell)?.item ?? 0
         }
     }
@@ -86,8 +86,9 @@ class PhotosViewController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! PhotoCollectionViewCell
     
+        guard let photoData = photos[indexPath.row].data else { return cell }
         cell.setLikes(likes: photos[indexPath.row].likes)
-        cell.photo.image = UIImage(data: photos[indexPath.row].data)
+        cell.photo.image = UIImage(data: photoData)
         cell.photo.setNeedsDisplay()
     
         return cell
